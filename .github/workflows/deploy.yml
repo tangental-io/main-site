@@ -13,7 +13,7 @@ defaults:
     shell: bash
 
 jobs:
-  build:
+  upload:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -24,8 +24,15 @@ jobs:
           project_id: ${{ vars.GCP_PROJECT_ID }}
           workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ vars.GCP_SERVICE_ACCOUNT_EMAIL }}
-    - id: 'upload-folder'
-      uses: 'google-github-actions/upload-cloud-storage@v2'
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
       with:
-        path: 'public'
-        destination: ${{ vars.BUCKET_NAME }}
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+    # - id: 'upload-folder'
+    #   uses: 'google-github-actions/upload-cloud-storage@v2'
+    #   with:
+    #     path: 'public'
+    #     destination: ${{ vars.BUCKET_NAME }}
+    #     parent: false
+    - name: 'Sync Folder'
+      run: gsutil -m rsync -r -c -d public gs://${{ vars.BUCKET_NAME }}
