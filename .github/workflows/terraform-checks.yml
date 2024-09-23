@@ -1,0 +1,20 @@
+name: "Run Checks for Terraform"
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+  pull_request: {}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  plan:
+    name: Terraform Checks
+    uses: tangental-io/terraform/.github/workflows/terraform-checks-template.yml@main
+    with:
+      working_directory: ${{ vars.TF_WORKING_DIRECTORY }}
+    
