@@ -13,3 +13,4 @@ jobs:
     uses: tangental-io/terraform/.github/workflows/terraform-apply-template.yml@main
     with:
       working_directory: ${{ vars.TF_WORKING_DIRECTORY }}
+    secrets: inherit
